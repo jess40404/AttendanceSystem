@@ -1,0 +1,141 @@
+import React, { useState, useEffect } from 'react';
+import { ArrowLeft, RefreshCw, Download } from 'lucide-react';
+import Sidebar from './sidebar.jsx';
+import '../App.css';
+
+const QRCode = ({ onNavigate, currentPage }) => {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [time, setTime] = useState(new Date());
+  const [sessionId, setSessionId] = useState(generateSessionId());
+  const qrValue = `Attendance-${sessionId}`;
+
+  // Update time in real-time
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  function generateSessionId() {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+  }
+
+  const handleRefreshCode = () => {
+    setSessionId(generateSessionId());
+    console.log('QR Code refreshed');
+  };
+
+  const handleDownload = async () => {
+    const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrValue)}`;
+    try {
+      const response = await fetch(qrImageUrl);
+      const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      link.download = `attendance-qr-${sessionId}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.error('Failed to download QR code:', error);
+    }
+  };
+
+  const handleNavigate = page => {
+    setIsSidebarOpen(false);
+    onNavigate(page);
+  };
+
+  return (
+    <div className="dashboard-container">
+      <Sidebar onNavigate={handleNavigate} currentPage={currentPage} isOpen={isSidebarOpen} />
+      {isSidebarOpen && (
+        <button
+          className="sidebar-backdrop"
+          aria-label="Close navigation menu"
+          onClick={() => setIsSidebarOpen(false)}
+        />
+      )}
+
+      <main className="main-content">
+        <header className="dashboard-header">
+          <button
+            className="menu-button"
+            type="button"
+            aria-label="Back to dashboard"
+            onClick={() => handleNavigate('comp/dashboard.jsx')}
+          >
+            <ArrowLeft size={24} />
+          </button>
+          <h1>QR Code Generator</h1>
+        </header>
+
+        <div className="qrcode-style-1">
+          {/* QR Code Container */}
+          <div className="qrcode-style-2">
+            {/* QR Code Image */}
+            <div className="qrcode-style-3">
+              <img
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrValue)}`}
+                alt="Attendance QR Code"
+                className="qrcode-style-4"
+              />
+            </div>
+
+            {/* Real-time Clock */}
+            <div className="qrcode-style-5">
+              {time.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+                hour12: true
+              })}
+            </div>
+
+            {/* Date */}
+            <div className="qrcode-style-6">
+              {time.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              })}
+            </div>
+
+            {/* Attendance Note */}
+            <div className="qrcode-style-7">
+              📱 Scan the QR Code for attendance <br />
+              Arrival time:<br />
+              4:30 PM - 4:45 PM = PRESENT<br />
+              4:46 PM - 5:00 PM = LATE<br />
+              5:01 PM - 6:00 PM = ABSENT<br />
+            </div>
+
+            {/* Session ID */}
+            <div className="qrcode-style-8">
+              Session ID: {sessionId}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="qrcode-style-9">
+              <button onClick={handleRefreshCode} className="qrcode-style-10">
+                <RefreshCw size={18} />
+                Generate New Code
+              </button>
+
+              <button onClick={handleDownload} className="qrcode-style-11">
+                <Download size={18} />
+                Download QR Code
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
+
+export default QRCode;
