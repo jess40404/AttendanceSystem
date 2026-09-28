@@ -1,13 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ArrowLeft, RefreshCw, Download } from 'lucide-react';
 import Sidebar from './sidebar.jsx';
 import '../App.css';
+import '../styles/qrcode.css';
+import { apiRequest } from '../api.js';
 
 const QRCode = ({ onNavigate, currentPage }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [time, setTime] = useState(new Date());
-  const [sessionId, setSessionId] = useState(generateSessionId());
-  const qrValue = `Attendance-${sessionId}`;
+  const [sessionId, setSessionId] = useState('');
+  const qrValue = sessionId ? (() => {
+    const url = new URL(import.meta.env.VITE_PUBLIC_APP_URL || window.location.href);
+    url.search = new URLSearchParams({ session: sessionId }).toString();
+    url.hash = '';
+    return url.toString();
+  })() : '';
 
   // Update time in real-time
   useEffect(() => {
@@ -17,13 +24,13 @@ const QRCode = ({ onNavigate, currentPage }) => {
     return () => clearInterval(timer);
   }, []);
 
-  function generateSessionId() {
-    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-  }
+  useEffect(() => {
+    apiRequest('qr-session', { method: 'POST' }).then((data) => setSessionId(data.sessionId)).catch((error) => alert(error.message));
+  }, []);
 
-  const handleRefreshCode = () => {
-    setSessionId(generateSessionId());
-    console.log('QR Code refreshed');
+  const handleRefreshCode = async () => {
+    try { const data = await apiRequest('qr-session', { method: 'POST' }); setSessionId(data.sessionId); }
+    catch (error) { setSessionId(''); alert(error.message); }
   };
 
   const handleDownload = async () => {
@@ -66,7 +73,7 @@ const QRCode = ({ onNavigate, currentPage }) => {
             className="menu-button"
             type="button"
             aria-label="Back to dashboard"
-            onClick={() => handleNavigate('comp/dashboard.jsx')}
+            onClick={() => handleNavigate('home')}
           >
             <ArrowLeft size={24} />
           </button>
@@ -78,11 +85,13 @@ const QRCode = ({ onNavigate, currentPage }) => {
           <div className="qrcode-style-2">
             {/* QR Code Image */}
             <div className="qrcode-style-3">
-              <img
-                src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrValue)}`}
-                alt="Attendance QR Code"
-                className="qrcode-style-4"
-              />
+              {sessionId ? (
+                <img
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrValue)}`}
+                  alt="Scan to open the student attendance portal"
+                  className="qrcode-style-4"
+                />
+              ) : <p>Preparing QR code...</p>}
             </div>
 
             {/* Real-time Clock */}

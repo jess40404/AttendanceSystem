@@ -1,0 +1,152 @@
+/* Base Layout & Reset */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+.settings-style-1 {
+  padding: 30px;
+  max-width: 800px;
+}
+
+/* Card Containers */
+.settings-style-2 {
+  background: #0f172a; /* Dark theme card background */
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Card Headings */
+.settings-style-3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Form Layout Grids */
+.settings-style-4 {
+  display: grid;
+  gap: 15px;
+}
+
+/* 2-Column Responsive Grid for Time & Radius Inputs */
+.form-row-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+@media (max-width: 600px) {
+  .form-row-2col {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Input Labels */
+.settings-style-5 {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #cbd5e1;
+}
+
+/* Text, Time, Password, & Number Inputs */
+.settings-style-6 {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  font-size: 14px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+  outline: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.settings-style-6:focus {
+  border-color: #2d7a4f;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Custom styling for HTML time picker icon in dark mode */
+.settings-style-6::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+  cursor: pointer;
+}
+
+/* Helper Text */
+.help-text {
+  display: block;
+  font-size: 12px;
+  color: #94a3b8;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+/* Checkbox Row Styling */
+.checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.checkbox-row:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.checkbox-input {
+  cursor: pointer;
+  width: 18px;
+  height: 18px;
+  accent-color: #2d7a4f;
+}
+
+.checkbox-label {
+  cursor: pointer;
+  font-size: 14px;
+  color: #ffffff;
+  flex: 1;
+  user-select: none;
+}
+
+/* Save Button */
+.settings-style-31 {
+  padding: 12px 30px;
+  background: #2d7a4f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.settings-style-31:hover {
+  background: #24633f;
+  transform: translateY(-1px);
+}
+
+.settings-style-31:active {
+  transform: translateY(0);
+}

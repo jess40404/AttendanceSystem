@@ -1,34 +1,21 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu, Search, Download, Filter, CheckCircle, Clock, XCircle } from 'lucide-react';
 import Sidebar from './sidebar.jsx';
 import '../App.css';
+import '../styles/attendance.css';
+import { apiRequest } from '../api.js';
+
 const Attendance = ({
   onNavigate,
   currentPage
 }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [attendanceRecords, setAttendanceRecords] = useState([{
-    id: 1,
-    studentName: 'Juan Dela Cruz',
-    class: 'CS 101',
-    date: '2026-08-09',
-    time: '08:05 AM',
-    status: 'Present'
-  }, {
-    id: 2,
-    studentName: 'Maria Santos',
-    class: 'IT 204',
-    date: '2026-08-09',
-    time: '10:15 AM',
-    status: 'Late'
-  }, {
-    id: 3,
-    studentName: 'Kyle Reyes',
-    class: 'CS 301',
-    date: '2026-08-09',
-    time: '01:00 PM',
-    status: 'Present'
-  }]);
+  const [attendanceRecords, setAttendanceRecords] = useState([]);
+  const [search, setSearch] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
+  useEffect(() => {
+    apiRequest('attendance', { query: { search } }).then((data) => setAttendanceRecords(data.attendance)).catch((error) => alert(error.message));
+  }, [search]);
   const getStatusIcon = status => {
     switch (status) {
       case 'Present':
@@ -41,11 +28,16 @@ const Attendance = ({
         return null;
     }
   };
+  const visibleRecords = statusFilter === 'All'
+    ? attendanceRecords
+    : attendanceRecords.filter((record) => record.status === statusFilter);
   const handleExport = () => {
-    console.log('Export attendance records');
+    const rows = [['Student Name', 'Class', 'Date', 'Time', 'Status'], ...visibleRecords.map((record) => [record.studentName, record.class, record.date, record.time, record.status])];
+    const csv = rows.map((row) => row.map((value) => `"${String(value).replaceAll('"', '""')}"`).join(',')).join('\n');
+    const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv' })); link.download = 'attendance-records.csv'; link.click(); URL.revokeObjectURL(link.href);
   };
   const handleFilter = () => {
-    console.log('Open filter options');
+    setStatusFilter(statusFilter === 'All' ? 'Present' : statusFilter === 'Present' ? 'Late' : 'All');
   };
   const handleNavigate = page => {
     setIsSidebarOpen(false);
@@ -61,7 +53,7 @@ const Attendance = ({
           <button className="menu-button" type="button" aria-label="Open navigation menu" aria-expanded={isSidebarOpen} onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             <Menu size={24} />
           </button>
-          <h1>Attendance Records</h1>
+          <h1>ATTENDANCE RECORDS</h1>
           <div className="attendance-style-1">
             <button onClick={handleFilter} className="attendance-style-2">
               <Filter size={20} />
@@ -78,7 +70,7 @@ const Attendance = ({
           <div className="attendance-style-5">
             <div className="attendance-style-6">
               <Search size={18} className="attendance-style-7" />
-              <input type="text" placeholder="Search by student name or class..." className="attendance-style-8" />
+              <input type="text" placeholder="Search by student name or class..." className="attendance-style-8" value={search} onChange={(event) => setSearch(event.target.value)} />
             </div>
           </div>
 
@@ -94,7 +86,7 @@ const Attendance = ({
                 </tr>
               </thead>
               <tbody>
-                {attendanceRecords.map(record => <tr key={record.id} className="attendance-style-17">
+                {visibleRecords.map(record => <tr key={record.id} className="attendance-style-17">
                     <td className="attendance-style-18">{record.studentName}</td>
                     <td className="attendance-style-19">{record.class}</td>
                     <td className="attendance-style-20">{record.date}</td>

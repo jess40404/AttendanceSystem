@@ -1,0 +1,270 @@
+/* Layout & Container Rules */
+.reports-style-1 {
+  padding: 30px;
+}
+
+.reports-style-2 {
+  background: linear-gradient(
+    135deg,
+    rgba(19, 39, 90, 0.82),
+    rgba(6, 18, 53, 0.88)
+  );
+  padding: 24px;
+  border-radius: 14px;
+  margin-bottom: 25px;
+  border: 1px solid #294475;
+  box-shadow: 0 11px 23px rgba(0, 0, 0, 0.18);
+}
+
+.reports-style-3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  color: #f5f6ff;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.reports-style-4 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 21px;
+}
+
+.reports-style-5,
+.reports-style-7,
+.reports-style-9 {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #cbd4fa;
+}
+
+.reports-style-6,
+.reports-style-8,
+.reports-style-10 {
+  width: 100%;
+  padding: 11px 14px;
+  background: rgba(3, 13, 48, 0.65);
+  border: 1px solid rgba(100, 127, 220, 0.3);
+  border-radius: 10px;
+  font-size: 14px;
+  color: #f5f6ff;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.reports-style-6:focus,
+.reports-style-8:focus,
+.reports-style-10:focus {
+  border-color: #8d42ff;
+}
+
+.reports-style-6 option {
+  background: #061334;
+  color: #ffffff;
+}
+
+.reports-style-11 {
+  margin-top: 20px;
+  padding: 12px 28px;
+  background: linear-gradient(145deg, #712ef7, #4b12c9);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 6px 18px rgba(113, 46, 247, 0.35);
+}
+
+.reports-style-11:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 22px rgba(113, 46, 247, 0.5);
+}
+
+/* Report Dynamic Table Section */
+.report-results-wrapper {
+  background: linear-gradient(
+    135deg,
+    rgba(19, 39, 90, 0.82),
+    rgba(6, 18, 53, 0.88)
+  );
+  padding: 24px;
+  border-radius: 14px;
+  border: 1px solid #294475;
+  box-shadow: 0 11px 23px rgba(0, 0, 0, 0.18);
+}
+
+.report-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 18px;
+  border-bottom: 1px solid rgba(105, 127, 212, 0.2);
+  margin-bottom: 22px;
+}
+
+.report-results-header h2 {
+  margin: 0 0 6px;
+  font-size: 20px;
+  color: #ffffff;
+}
+
+.report-date-range {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #b8c3ee;
+  font-size: 13px;
+}
+
+.record-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(141, 66, 255, 0.15);
+  border: 1px solid rgba(141, 66, 255, 0.3);
+  color: #be8eff;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Table Styling */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.report-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 14px;
+  color: #eaf0ff;
+}
+
+.report-table th {
+  padding: 12px 16px;
+  background: rgba(3, 13, 48, 0.7);
+  color: #cbd4fa;
+  font-weight: 600;
+  border-bottom: 1px solid #253b67;
+  white-space: nowrap;
+}
+
+.report-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid rgba(37, 59, 103, 0.6);
+  vertical-align: middle;
+}
+
+.report-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.student-id-tag {
+  background: rgba(255, 255, 255, 0.06);
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-family: monospace;
+  color: #a3c4ff;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+  color: #00e8f7;
+}
+
+/* Status & Stat Badges */
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.stat-pill.success {
+  background: rgba(40, 216, 164, 0.12);
+  color: #28d8a4;
+  border: 1px solid rgba(40, 216, 164, 0.25);
+}
+
+.stat-pill.warning {
+  background: rgba(255, 170, 9, 0.12);
+  color: #ffaa09;
+  border: 1px solid rgba(255, 170, 9, 0.25);
+}
+
+.stat-pill.danger {
+  background: rgba(255, 77, 106, 0.12);
+  color: #ff4d6a;
+  border: 1px solid rgba(255, 77, 106, 0.25);
+}
+
+.status-pill {
+  padding: 5px 12px;
+  border-radius: 18px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.ontime-pill {
+  background: rgba(19, 225, 172, 0.12);
+  border: 1px solid #087965;
+  color: #13e1ac;
+}
+
+.late-pill {
+  background: rgba(255, 175, 36, 0.12);
+  border: 1px solid #916000;
+  color: #ffaf24;
+}
+
+/* Daily Report Groups */
+.daily-tables-container {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.daily-group-card {
+  border: 1px solid rgba(100, 127, 220, 0.2);
+  border-radius: 10px;
+  background: rgba(3, 13, 48, 0.35);
+  overflow: hidden;
+}
+
+.daily-group-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  background: rgba(141, 66, 255, 0.1);
+  border-bottom: 1px solid rgba(100, 127, 220, 0.2);
+  color: #d1b5ff;
+}
+
+.daily-group-title h3 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.no-data,
+.no-data-card {
+  text-align: center;
+  padding: 30px !important;
+  color: #8c9ccf;
+}

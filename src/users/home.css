@@ -1,0 +1,153 @@
+/* Layout & Container Grid */
+.home-detail-grid {
+  margin-top: 20px;
+}
+
+/* Welcome Section Header Layout */
+.student-welcome {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.welcome-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+}
+
+.welcome-text {
+  flex: 1;
+}
+
+.welcome-subtext {
+  margin: 0;
+  max-width: 500px;
+  color: var(--umut, #a0a5ba);
+}
+
+/* Edit profile / Register Button - Compact size placed on the right */
+.registration-trigger {
+  width: auto !important;
+  max-width: max-content;
+  padding: 10px 20px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Centralized Registration Dialog Modal */
+.registration-dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto; /* Centralizes HTML dialog element on screen */
+  width: min(680px, calc(100% - 32px));
+  max-width: 680px;
+  max-height: min(90vh, 760px);
+  padding: 24px;
+  overflow-y: auto;
+  color: var(--utext, #ffffff);
+  background: #08163c;
+  border: 1px solid rgba(107, 136, 216, 0.4);
+  border-radius: 12px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+}
+
+.registration-dialog::backdrop {
+  background: rgba(2, 7, 26, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.registration-dialog-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  color: var(--umut, #a0a5ba);
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.registration-dialog-close:hover {
+  color: var(--utext, #ffffff);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.registration-dialog .registration-card {
+  margin: 0;
+  padding: 8px 0 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.registration-dialog .card-heading {
+  padding-right: 36px;
+}
+
+.registration-help {
+  margin: 12px 0 18px;
+  color: var(--umut, #a0a5ba);
+  font-size: 13px;
+}
+
+/* Form Inner Layout */
+.registration-form {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 13px;
+}
+
+.registration-form label {
+  display: grid;
+  gap: 6px;
+  color: #c8d4f5;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.registration-form input {
+  width: 100%;
+  padding: 10px 11px;
+  color: #fff;
+  background: #061638;
+  border: 1px solid #34548f;
+  border-radius: 7px;
+  font: inherit;
+}
+
+.registration-form .student-primary {
+  grid-column: 1 / -1;
+  margin-top: 4px;
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 560px) {
+  .welcome-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .registration-trigger {
+    width: 100% !important;
+  }
+
+  .registration-dialog {
+    padding: 18px;
+  }
+
+  .registration-form {
+    grid-template-columns: 1fr;
+  }
+}

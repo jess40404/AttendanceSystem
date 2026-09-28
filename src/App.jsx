@@ -1,23 +1,28 @@
 import './App.css'
 import { useState } from 'react'
-import Dashboard from './comp/dashboard.jsx'
-import Classes from './comp/classes.jsx'
-import Students from './comp/students.jsx'
-import Attendance from './comp/attendance.jsx'
-import Reports from './comp/reports.jsx'
-import Settings from './comp/settings.jsx'
-import Profile from './comp/profile.jsx'
-import QRCode from './comp/qrcode.jsx'
+import Login from './admin/login.jsx'
+import Signup from './admin/signup.jsx'
+import Home from './admin/home.jsx'
+import Students from './admin/students.jsx'
+import Attendance from './admin/attendance.jsx'
+import Reports from './admin/reports.jsx'
+import Settings from './admin/settings.jsx'
+import Profile from './admin/profile.jsx'
+import QRCode from './admin/qrcode.jsx'
+
+import Users from './users.jsx'
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('dashboard')
+  const [currentPage, setCurrentPage] = useState('home')
 
   const renderPage = () => {
     switch (currentPage) {
-      case 'dashboard':
-        return <Dashboard onNavigate={setCurrentPage} currentPage={currentPage} />
-      case 'classes':
-        return <Classes onNavigate={setCurrentPage} currentPage={currentPage} />
+      case 'login':
+        return <Login onNavigate={setCurrentPage} currentPage={currentPage} />
+      case 'signup':
+        return <Signup onNavigate={setCurrentPage} />
+      case 'home':
+        return <Home onNavigate={setCurrentPage} currentPage={currentPage} />
       case 'students':
         return <Students onNavigate={setCurrentPage} currentPage={currentPage} />
       case 'attendance':
@@ -30,8 +35,10 @@ function App() {
         return <Profile onNavigate={setCurrentPage} currentPage={currentPage} />
       case 'qrcode':
         return <QRCode onNavigate={setCurrentPage} currentPage={currentPage} />
+      case 'users':
+        return <Users onNavigate={setCurrentPage} currentPage={currentPage} />
       default:
-        return <Dashboard onNavigate={setCurrentPage} currentPage={currentPage} />
+        return <Home onNavigate={setCurrentPage} currentPage={currentPage} />
     }
   }
 

@@ -1,7 +1,10 @@
-import React, { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Menu, Save, Mail, Phone, MapPin, Calendar, Edit2, LogOut } from 'lucide-react';
 import Sidebar from './sidebar.jsx';
 import '../App.css';
+import '../styles/profile.css';
+import { apiRequest } from '../api.js';
+
 const Profile = ({
   onNavigate,
   currentPage
@@ -21,6 +24,14 @@ const Profile = ({
     avatar: '👤'
   });
   const [editData, setEditData] = useState(profileData);
+  useEffect(() => {
+    apiRequest('profile').then(({ profile }) => {
+      if (!profile) return;
+      const [firstName, ...lastNameParts] = profile.name.split(' ');
+      const loaded = { firstName, lastName: lastNameParts.join(' '), email: profile.email, phone: profile.phone, position: profile.position, department: profile.department, location: profile.location, bio: profile.bio, joinDate: profile.created_at?.slice(0, 10) || '2024-01-15', avatar: '👤' };
+      setProfileData(loaded); setEditData(loaded);
+    }).catch((error) => alert(error.message));
+  }, []);
   const handleEdit = () => {
     setIsEditing(true);
     setEditData(profileData);
@@ -35,16 +46,14 @@ const Profile = ({
     });
     console.log(`${field} updated to:`, value);
   };
-  const handleSave = () => {
-    setProfileData(editData);
-    setIsEditing(false);
-    console.log('Profile saved:', editData);
-    alert('Profile updated successfully!');
+  const handleSave = async () => {
+    try { const result = await apiRequest('profile', { method: 'PUT', body: editData }); setProfileData(editData); setIsEditing(false); alert(result.message); }
+    catch (error) { alert(error.message); }
   };
   const handleLogout = () => {
-    console.log('Logging out...');
+    localStorage.removeItem('user');
     alert('You have been logged out.');
-    // Here you would typically navigate to login page
+    onNavigate('login');
   };
   const handleNavigate = page => {
     setIsSidebarOpen(false);
@@ -60,7 +69,7 @@ const Profile = ({
           <button className="menu-button" type="button" aria-label="Open navigation menu" aria-expanded={isSidebarOpen} onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
             <Menu size={24} />
           </button>
-          <h1>My Profile</h1>
+          <h1>MY PROFILE</h1>
         </header>
 
         <div className="profile-style-1">
