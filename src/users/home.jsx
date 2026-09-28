@@ -10,12 +10,14 @@ import {
 } from "lucide-react";
 import Registration from "./registration.jsx";
 import "./home.css";
+
 const date = (value) =>
   new Date(`${value}T00:00:00`).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
     year: "numeric",
   });
+
 export default function UserHome({
   student,
   subjects,
@@ -34,6 +36,7 @@ export default function UserHome({
   );
   const registrationDialog = useRef(null);
   const subject = subjects[0];
+
   useEffect(() => {
     const dialog = registrationDialog.current;
     if (!dialog) return;
@@ -41,10 +44,15 @@ export default function UserHome({
     if (registrationOpen && !dialog.open) dialog.showModal();
     if (!registrationOpen && dialog.open) dialog.close();
   }, [registrationOpen]);
+
   const checkedIn = history.some(
     (item) => item.date === new Date().toISOString().slice(0, 10),
   );
   const rate = Number(summary.rate || 0).toFixed(1);
+
+  // Active session status check
+  const hasActiveSession = Boolean(qrSession);
+
   return (
     <>
       <section className="student-welcome">
@@ -67,6 +75,7 @@ export default function UserHome({
           Register your profile, view classes, and keep your attendance up to date.
         </p>
       </section>
+
       <dialog
         className="registration-dialog"
         ref={registrationDialog}
@@ -90,6 +99,7 @@ export default function UserHome({
           />
         )}
       </dialog>
+
       <div className="student-dashboard-grid">
         <section className="student-card">
           <p className="eyebrow">CURRENT ACTIVE CLASS</p>
@@ -107,23 +117,28 @@ export default function UserHome({
                 {subject?.schedule || "Schedule unavailable"}
               </small>
             </div>
-            <b className="live-pill">{qrSession ? "Open" : "Scan QR"}</b>
+            <b className="live-pill">{hasActiveSession ? "Open" : "Scan QR"}</b>
           </div>
           <button
             className="student-primary"
-            disabled={!student || !qrSession || checkedIn || saving}
-            onClick={onCheckIn}
+            disabled={!student || !hasActiveSession || checkedIn || saving}
+            onClick={() => {
+              const urlParams = new URLSearchParams(window.location.search);
+              const sessionId = urlParams.get("session") || qrSession;
+              onCheckIn(sessionId);
+            }}
           >
             <QrCode size={20} />
             {checkedIn
               ? "Checked in today"
               : !student
                 ? "Register to check in"
-                : !qrSession
+                : !hasActiveSession
                   ? "Scan admin QR to check in"
                   : "Check in now"}
           </button>
         </section>
+
         <section className="student-card score-card">
           <div className="card-heading">
             <h3>Attendance score</h3>
@@ -147,6 +162,7 @@ export default function UserHome({
           </div>
         </section>
       </div>
+
       <div className="home-detail-grid">
         <section className="student-card recent-card">
           <div className="card-heading">

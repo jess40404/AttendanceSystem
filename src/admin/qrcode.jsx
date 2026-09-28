@@ -9,11 +9,28 @@ const QRCode = ({ onNavigate, currentPage }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [time, setTime] = useState(new Date());
   const [sessionId, setSessionId] = useState('');
-  const qrValue = sessionId ? (() => {
-    const url = new URL(
-      import.meta.env.VITE_PUBLIC_APP_URL || import.meta.env.BASE_URL,
-      window.location.origin,
-    );
+  const apiUrl = import.meta.env.VITE_API_URL?.trim();
+  const publicAppUrl = import.meta.env.PROD
+    ? (import.meta.env.VITE_PUBLIC_APP_URL?.trim() || 'https://jess40404.github.io/attendance_system/')
+    : '';
+  let deploymentUrl = null;
+  let qrError = '';
+  if (!import.meta.env.PROD) {
+    qrError = 'QR codes are available only in a production deployment.';
+  } else if (!apiUrl) {
+    qrError = 'Set VITE_API_URL to the publicly reachable PHP API before deploying QR check-in.';
+  } else {
+    try {
+      deploymentUrl = new URL(publicAppUrl);
+      const apiDeploymentUrl = new URL(apiUrl);
+      if (deploymentUrl.protocol !== 'https:' || apiDeploymentUrl.protocol !== 'https:') throw new Error();
+      if ([deploymentUrl.hostname, apiDeploymentUrl.hostname].some((hostname) => ['localhost', '127.0.0.1', '::1'].includes(hostname))) throw new Error();
+    } catch {
+      qrError = 'Set public HTTPS URLs for VITE_PUBLIC_APP_URL and VITE_API_URL.';
+    }
+  }
+  const qrValue = sessionId && deploymentUrl ? (() => {
+    const url = new URL(deploymentUrl);
     url.searchParams.set('page', 'user-home');
     url.searchParams.set('session', sessionId);
     url.hash = '';
@@ -29,8 +46,9 @@ const QRCode = ({ onNavigate, currentPage }) => {
   }, []);
 
   useEffect(() => {
+    if (qrError) return;
     apiRequest('qr-session', { method: 'POST' }).then((data) => setSessionId(data.sessionId)).catch((error) => alert(error.message));
-  }, []);
+  }, [qrError]);
 
   const handleRefreshCode = async () => {
     try { const data = await apiRequest('qr-session', { method: 'POST' }); setSessionId(data.sessionId); }
@@ -38,6 +56,7 @@ const QRCode = ({ onNavigate, currentPage }) => {
   };
 
   const handleDownload = async () => {
+    if (!qrValue) return;
     const qrImageUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(qrValue)}`;
     try {
       const response = await fetch(qrImageUrl);
@@ -95,7 +114,7 @@ const QRCode = ({ onNavigate, currentPage }) => {
                   alt="Scan to open the student attendance portal"
                   className="qrcode-style-4"
                 />
-              ) : <p>Preparing QR code...</p>}
+              ) : <p>{qrError || 'Preparing QR code...'}</p>}
             </div>
 
             {/* Real-time Clock */}
@@ -134,12 +153,12 @@ const QRCode = ({ onNavigate, currentPage }) => {
 
             {/* Action Buttons */}
             <div className="qrcode-style-9">
-              <button onClick={handleRefreshCode} className="qrcode-style-10">
+              <button onClick={handleRefreshCode} className="qrcode-style-10" disabled={!deploymentUrl}>
                 <RefreshCw size={18} />
                 Generate New Code
               </button>
 
-              <button onClick={handleDownload} className="qrcode-style-11">
+              <button onClick={handleDownload} className="qrcode-style-11" disabled={!qrValue}>
                 <Download size={18} />
                 Download QR Code
               </button>

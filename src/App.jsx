@@ -9,13 +9,12 @@ import Reports from './admin/reports.jsx'
 import Settings from './admin/settings.jsx'
 import Profile from './admin/profile.jsx'
 import QRCode from './admin/qrcode.jsx'
-
 import Users from './users.jsx'
 
 function App() {
   const [currentPage, setCurrentPage] = useState(() => {
     const requestedPage = new URLSearchParams(window.location.search).get('page')
-    return requestedPage === 'users' ? 'users' : 'home'
+    return requestedPage === 'users' || requestedPage === 'user-home' ? 'users' : 'home'
   })
 
   const renderPage = () => {

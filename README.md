@@ -27,6 +27,23 @@ npm run dev
 
 The frontend calls the PHP API at `http://localhost/attendance_system/PHP`. Set `VITE_API_URL` when the project is hosted at another URL.
 
+## Deploying QR check-in
+
+QR codes are disabled in development and point to the deployed GitHub Pages
+Student Portal home by default. QR generation also requires `VITE_API_URL` to
+point to a publicly reachable HTTPS PHP API. For a different production frontend,
+set `VITE_PUBLIC_APP_URL` to its public URL, including the final slash. The QR
+link includes the active attendance session token.
+
+```bash
+# Set both URLs to publicly reachable production services before deployment
+$env:VITE_PUBLIC_APP_URL="https://jess40404.github.io/attendance_system/"; $env:VITE_API_URL="https://api.example.com/attendance_system/PHP"; npm run deploy
+```
+
+A phone cannot reach an API hosted only at `localhost` or on a private XAMPP
+machine. Set both environment variables in PowerShell before running
+`npm run deploy`.
+
 Available data workflows include student CRUD/search, attendance search/filter/CSV export, date-range reports, subject/schedule settings, administrator profile updates, authentication, and database-backed QR session generation.
 # React + Vite
 
