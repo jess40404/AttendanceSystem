@@ -13,7 +13,10 @@ import QRCode from './admin/qrcode.jsx'
 import Users from './users.jsx'
 
 function App() {
-  const [currentPage, setCurrentPage] = useState('home')
+  const [currentPage, setCurrentPage] = useState(() => {
+    const requestedPage = new URLSearchParams(window.location.search).get('page')
+    return requestedPage === 'users' ? 'users' : 'home'
+  })
 
   const renderPage = () => {
     switch (currentPage) {

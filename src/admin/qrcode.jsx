@@ -10,8 +10,11 @@ const QRCode = ({ onNavigate, currentPage }) => {
   const [time, setTime] = useState(new Date());
   const [sessionId, setSessionId] = useState('');
   const qrValue = sessionId ? (() => {
-    const url = new URL(import.meta.env.VITE_PUBLIC_APP_URL || window.location.href);
-    url.search = new URLSearchParams({ session: sessionId }).toString();
+    const url = new URL(
+      import.meta.env.VITE_PUBLIC_APP_URL || import.meta.env.BASE_URL,
+      window.location.origin,
+    );
+    url.search = new URLSearchParams({ page: 'users', session: sessionId }).toString();
     url.hash = '';
     return url.toString();
   })() : '';
