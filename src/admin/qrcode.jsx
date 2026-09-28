@@ -14,7 +14,8 @@ const QRCode = ({ onNavigate, currentPage }) => {
       import.meta.env.VITE_PUBLIC_APP_URL || import.meta.env.BASE_URL,
       window.location.origin,
     );
-    url.search = new URLSearchParams({ page: 'users', session: sessionId }).toString();
+    url.searchParams.set('page', 'user-home');
+    url.searchParams.set('session', sessionId);
     url.hash = '';
     return url.toString();
   })() : '';
