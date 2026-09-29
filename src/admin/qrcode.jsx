@@ -12,8 +12,13 @@ const QRCode = ({ onNavigate, currentPage }) => {
 
   // Use the app's configured base path so QR links work in local and deployed builds.
   const qrValue = sessionId ? (() => {
-    const baseUrl = import.meta.env.VITE_PUBLIC_APP_URL || import.meta.env.BASE_URL;
-    const url = new URL(baseUrl, window.location.origin);
+    const rawUrl = import.meta.env.VITE_PUBLIC_APP_URL || window.location.origin;
+    let url;
+    try {
+      url = new URL(rawUrl);
+    } catch {
+      url = new URL(rawUrl, window.location.origin);
+    }
     url.searchParams.set('page', 'user-home');
     url.searchParams.set('session', sessionId);
     return url.toString();
